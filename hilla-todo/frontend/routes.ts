@@ -1,4 +1,6 @@
-import { Route } from '@vaadin/router';
+import { Commands, Context, Route } from '@vaadin/router';
+import { isLoggedIn } from './auth';
+import './views/login/login-view';
 import './views/main-layout';
 import './views/todo/todo-view';
 
@@ -8,16 +10,25 @@ export type ViewRoute = Route & {
   children?: ViewRoute[];
 };
 
+const actionGuard = (_: Context, commands: Commands) => {
+  if (!isLoggedIn()) {
+    return commands.redirect('/login');
+  }
+  return undefined;
+};
+
 export const views: ViewRoute[] = [
   // place routes below (more info https://hilla.dev/docs/routing)
   {
     path: '',
+    action: actionGuard,
     component: 'todo-view',
     icon: '',
     title: '',
   },
   {
     path: 'todo',
+    action: actionGuard,
     component: 'todo-view',
     icon: 'la la-list-alt',
     title: 'Todo',
@@ -25,8 +36,13 @@ export const views: ViewRoute[] = [
 ];
 export const routes: ViewRoute[] = [
   {
+    path: '/login',
+    component: 'login-view',
+  },
+  {
     path: '',
     component: 'main-layout',
+    action: actionGuard,
     children: [...views],
   },
 ];
