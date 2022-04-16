@@ -3,12 +3,12 @@ import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-messages';
-import Todo from 'Frontend/generated/com/example/application/Todo';
-import TodoModel from 'Frontend/generated/com/example/application/TodoModel';
 import { TodoEndpoint } from 'Frontend/generated/endpoints';
 import { html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { View } from '../view';
+import TodoModel from 'Frontend/generated/com/example/application/entity/TodoModel';
+import Todo from 'Frontend/generated/com/example/application/entity/Todo';
 
 @customElement('todo-view')
 export class TodoView extends View {

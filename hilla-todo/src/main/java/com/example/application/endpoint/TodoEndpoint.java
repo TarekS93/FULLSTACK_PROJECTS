@@ -1,8 +1,10 @@
 
-package com.example.application;
+package com.example.application.endpoint;
 
 import java.util.List;
 
+import com.example.application.entity.Todo;
+import com.example.application.repository.TodoRepository;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.Endpoint;
@@ -17,7 +19,7 @@ public class TodoEndpoint {
         this.repository = repository;
     }
 
-    public @Nonnull List<@Nonnull Todo> findAll() {
+    public @Nonnull List<com.example.application.entity.Todo> findAll() {
         return repository.findAll();
     }
 
