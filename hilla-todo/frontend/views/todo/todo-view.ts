@@ -41,7 +41,7 @@ export class TodoView extends View {
 
   async connectedCallback() {
     super.connectedCallback(); //(1)
-    this.todos = await TodoEndpoint.findAll();
+    this.todos = await TodoEndpoint.findAll() as Todo[];
   }
 
   async createTodo() {
