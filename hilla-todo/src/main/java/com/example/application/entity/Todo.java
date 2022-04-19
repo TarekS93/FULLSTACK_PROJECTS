@@ -13,7 +13,8 @@ public class Todo {
     private Integer id;
 
     private boolean done = false;
-    @NotBlank
+
+    @NotBlank(message = "Il campo non può essere vuoto")
     private String task;
 
     public Todo() {
