@@ -3,7 +3,7 @@ import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-messages';
-import { TodoEndpoint } from 'Frontend/generated/endpoints';
+import { DemoEndpoint, TodoEndpoint, UserInfoEndpoint } from 'Frontend/generated/endpoints';
 import { html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { View } from '../view';
@@ -42,6 +42,10 @@ export class TodoView extends View {
   async connectedCallback() {
     super.connectedCallback(); //(1)
     this.todos = await TodoEndpoint.findAll() as Todo[];
+    console.log(await UserInfoEndpoint.getUserInfo())
+    console.log(await DemoEndpoint.methodOne('test'))
+    console.log(await DemoEndpoint.methodTwo('test'))
+    console.log(await DemoEndpoint.methodThree('test'))
   }
 
   async createTodo() {

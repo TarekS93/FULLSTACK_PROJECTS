@@ -11,10 +11,10 @@ export type ViewRoute = Route & {
 };
 
 const actionGuard = (_: Context, commands: Commands) => {
-  if (!isLoggedIn()) {
-    return commands.redirect('/login');
-  }
-  return undefined;
+  // if (!isLoggedIn()) {
+  //   return commands.redirect('/login');
+  // }
+  // return undefined;
 };
 
 export const views: ViewRoute[] = [
@@ -36,8 +36,8 @@ export const views: ViewRoute[] = [
 ];
 export const routes: ViewRoute[] = [
   {
-    path: '/login',
-    component: 'login-view',
+    path: '/main',
+    component: 'main-layout',
   },
   {
     path: '',

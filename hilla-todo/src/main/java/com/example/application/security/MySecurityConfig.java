@@ -1,41 +1,70 @@
 package com.example.application.security;
 
-import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
-
-import org.springframework.context.annotation.Configuration;
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-@Configuration
-@EnableWebSecurity
-public class MySecurityConfig extends VaadinWebSecurityConfigurerAdapter {
+@KeycloakConfiguration
+public class MySecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth)
+            throws Exception {
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
+    @Bean
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // Set default security policy that permits Hilla internal requests and
-        // denies all other
-        super.configure(http);
-        // per autenticazione legacy con form integrata di spring-security
-        // http.formLogin();
-        // per autenticazione con vaadin-hilla
-        setLoginView(http, "/login");
-
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // Configure users and roles in memory
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}user").roles("USER")
-                .and()
-                .withUser("admin").password("{noop}admin").roles("ADMIN", "USER");
+    protected void configure(HttpSecurity http)
+            throws Exception {
+        http.httpBasic().disable();
+        http.formLogin().disable();
+        // disable spring security csrf as Vaadin already provides this
+        // also possible to disable this in Vaadin and leave this enabled
+        http.csrf().disable();
+        http
+                .authorizeRequests()
+                .antMatchers("/vaadinServlet/UIDL/**").permitAll()
+                .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
+                .anyRequest().authenticated();
+        http
+                .logout()
+                .addLogoutHandler(keycloakLogoutHandler())
+                .logoutUrl("/sso/logout").permitAll()
+                .logoutSuccessUrl("/");
+        http
+                .addFilterBefore(keycloakPreAuthActionsFilter(), LogoutFilter.class)
+                .addFilterBefore(keycloakAuthenticationProcessingFilter(), BasicAuthenticationFilter.class);
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint());
+        http
+                .sessionManagement()
+                .sessionAuthenticationStrategy(sessionAuthenticationStrategy());
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        web.ignoring().antMatchers("/images/**");
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
     }
+
 }
