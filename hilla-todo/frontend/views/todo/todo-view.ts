@@ -1,4 +1,6 @@
 import { Binder, field } from '@hilla/form';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-messages';
@@ -19,29 +21,36 @@ export class TodoView extends View {
   render() {
     return html`
       <div class="form">
-        <vaadin-text-field ${field(this.binder.model.task)}></vaadin-text-field>
-        <vaadin-button theme="primary" @click=${this.createTodo} ?disabled=${this.binder.invalid}> Add </vaadin-button>
+        <vaadin-text-field ${field(this.binder.model.task)}> </vaadin-text-field>
+        <vaadin-button theme="primary" @click=${this.createTodo} ?disabled=${this.binder.invalid}>
+          Aggiungi
+        </vaadin-button>
       </div>
       <div class="todos">
-        ${this.todos.map(
-          (todo) => html`
-            <div class="todo">
-              <vaadin-checkbox
-                ?checked=${todo.done}
-                @checked-changed=${(e: CustomEvent) => this.updateTodoState(todo, e.detail.value)}
-              ></vaadin-checkbox>
-              <span>${todo.task}</span>
-            </div>
-          `
-        )}
-        <vaadin-message-list .items="${this.todos.map((it) => Object.assign({ text: it.task }))}"></vaadin-message-list>
+        <vaadin-list-box multiple .selectedValues="${[]}" style="height: 200px">
+          ${this.todos.map(
+            (task) =>
+              html`
+                <vaadin-item style="width:95%; display: inline-flex" .selected="${task.done}">
+                  ${task.task}
+                </vaadin-item>
+                <vaadin-icon
+                  @click="${async () => {
+                    await TodoEndpoint.delete(task);
+                    this.todos = (await TodoEndpoint.findAll()) as Todo[];
+                  }}"
+                  icon="vaadin:trash"
+                ></vaadin-icon>
+              `
+          )}
+        </vaadin-list-box>
       </div>
     `;
   }
 
   async connectedCallback() {
     super.connectedCallback(); //(1)
-    await TodoEndpoint.deleteAll(); // Clean all
+    // await TodoEndpoint.deleteAll(); // Clean all
     this.todos = (await TodoEndpoint.findAll()) as Todo[];
   }
 

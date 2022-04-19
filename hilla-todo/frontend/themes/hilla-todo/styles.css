@@ -6,3 +6,11 @@ todo-view {
   display: block;
   padding: var(--lumo-space-m) var(--lumo-space-l);
 }
+
+vaadin-icon {
+  cursor: pointer;
+}
+
+vaadin-icon:hover {
+  color: #a91b0d;
+}

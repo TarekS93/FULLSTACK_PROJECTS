@@ -30,4 +30,8 @@ public class TodoEndpoint {
     public void deleteAll() {
         repository.deleteAll();
     }
+
+    public void delete(Todo entity) {
+        repository.delete(entity);
+    }
 }
