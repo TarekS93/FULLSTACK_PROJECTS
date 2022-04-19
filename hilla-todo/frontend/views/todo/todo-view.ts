@@ -1,14 +1,14 @@
 import { Binder, field } from '@hilla/form';
 import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
-import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-messages';
+import '@vaadin/vaadin-text-field';
+import Todo from 'Frontend/generated/com/example/application/entity/Todo';
+import TodoModel from 'Frontend/generated/com/example/application/entity/TodoModel';
 import { TodoEndpoint } from 'Frontend/generated/endpoints';
 import { html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { View } from '../view';
-import TodoModel from 'Frontend/generated/com/example/application/entity/TodoModel';
-import Todo from 'Frontend/generated/com/example/application/entity/Todo';
 
 @customElement('todo-view')
 export class TodoView extends View {
@@ -41,7 +41,8 @@ export class TodoView extends View {
 
   async connectedCallback() {
     super.connectedCallback(); //(1)
-    this.todos = await TodoEndpoint.findAll() as Todo[];
+    await TodoEndpoint.deleteAll(); // Clean all
+    this.todos = (await TodoEndpoint.findAll()) as Todo[];
   }
 
   async createTodo() {
