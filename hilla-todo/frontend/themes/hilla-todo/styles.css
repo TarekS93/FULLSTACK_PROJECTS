@@ -14,3 +14,8 @@ vaadin-icon {
 vaadin-icon:hover {
   color: #a91b0d;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}

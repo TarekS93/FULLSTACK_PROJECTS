@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Todo {
@@ -15,6 +16,7 @@ public class Todo {
     private boolean done = false;
 
     @NotBlank(message = "Il campo non può essere vuoto")
+    @Size(max = 4000)
     private String task;
 
     public Todo() {
