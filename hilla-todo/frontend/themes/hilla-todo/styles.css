@@ -16,6 +16,11 @@ vaadin-icon:hover {
 }
 
 .container {
+  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+}
+
+vaadin-list-box::part(items) {
+  overflow-y: unset !important;
 }

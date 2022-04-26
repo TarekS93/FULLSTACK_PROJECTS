@@ -20,14 +20,6 @@ export class TodoView extends View {
 
   render() {
     return html`
-      <!-- <style>
-        vaadin-list-box  {
-          [part="items"]{
-            background-color: green;
-          }
-        }
-      </style> -->
-
       <div class="form">
         <vaadin-text-field ${field(this.binder.model.task)}> </vaadin-text-field>
         <vaadin-button theme="primary" @click=${this.createTodo} ?disabled=${this.binder.invalid}>
@@ -36,40 +28,17 @@ export class TodoView extends View {
       </div>
       <div class="todos">
         <vaadin-list-box multiple .selectedValues="${[]}" style="height: 200px">
-          #shadow-root
-          <style>
-            /* vaadin-list-box {
-              :host {
-                display: flex;
-              }
-
-              :host([hidden]) {
-                display: none !important;
-              } */
-
-            [part='items'] {
-              height: 100%;
-              width: 100%;
-              overflow-y: unset !important;
-            }
-            /* } */
-          </style>
-
           ${this.todos.map(
-            (task) =>
-              html`
-                <div class="container">
-                  <vaadin-item style="grid-column: span 10;" .selected="${task.done}"> ${task.task} </vaadin-item>
-                  <vaadin-icon
-                    style="grid-column: span 2;"
-                    @click="${async () => {
-                      await TodoEndpoint.delete(task);
-                      this.todos = (await TodoEndpoint.findAll()) as Todo[];
-                    }}"
-                    icon="vaadin:trash"
-                  ></vaadin-icon>
-                </div>
-              `
+          (task) =>
+          html`
+          <div class="container">
+            <vaadin-item style="grid-column: span 10;" .selected="${task.done}"> ${task.task} </vaadin-item>
+            <vaadin-icon style="grid-column: span 2;" @click="${async () => {
+                  await TodoEndpoint.delete(task);
+                  this.todos = (await TodoEndpoint.findAll()) as Todo[];
+                }}" icon="vaadin:trash"></vaadin-icon>
+          </div>
+          `
           )}
         </vaadin-list-box>
       </div>
