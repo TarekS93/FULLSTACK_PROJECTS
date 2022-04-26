@@ -265,7 +265,8 @@
     "@hilla/form": "$@hilla/form",
     "@hilla/frontend": "$@hilla/frontend",
     "chokidar": "$chokidar",
-    "bootstrap": "$bootstrap"
+    "bootstrap": "$bootstrap",
+    "@vaadin/fusion-frontend": "$@vaadin/fusion-frontend"
   },
   "vaadin": {
     "dependencies": {
@@ -407,6 +408,6 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "1c49689d74cab0e95aa8d125d01f303084773ce3237c5d3f6e07bb150b21d23a"
+    "hash": "c895ae13cb964d6782d297f6183e3d5b81a2c5af3a88554b257f8317f812a5f2"
   }
 }

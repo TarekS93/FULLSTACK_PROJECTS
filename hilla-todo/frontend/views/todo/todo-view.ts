@@ -29,19 +29,16 @@ export class TodoView extends View {
       <div class="todos">
         <vaadin-list-box multiple .selectedValues="${[]}" style="height: 200px">
           ${this.todos.map(
-            (task) =>
-              html`
-                <vaadin-item style="width:95%; display: inline-flex" .selected="${task.done}">
-                  ${task.task}
-                </vaadin-item>
-                <vaadin-icon
-                  @click="${async () => {
-                    await TodoEndpoint.delete(task);
-                    this.todos = (await TodoEndpoint.findAll()) as Todo[];
-                  }}"
-                  icon="vaadin:trash"
-                ></vaadin-icon>
-              `
+          (task) =>
+          html`
+          <div class="container">
+            <vaadin-item style="grid-column: span 10;" .selected="${task.done}"> ${task.task} </vaadin-item>
+            <vaadin-icon style="grid-column: span 2;" @click="${async () => {
+                  await TodoEndpoint.delete(task);
+                  this.todos = (await TodoEndpoint.findAll()) as Todo[];
+                }}" icon="vaadin:trash"></vaadin-icon>
+          </div>
+          `
           )}
         </vaadin-list-box>
       </div>
