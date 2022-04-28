@@ -1,4 +1,4 @@
-import { LoginResult } from '@vaadin/fusion-frontend';
+import { LoginResult } from '@hilla/frontend';
 import '@vaadin/login';
 import { AfterEnterObserver, RouterLocation } from '@vaadin/router';
 import { login } from 'Frontend/auth';

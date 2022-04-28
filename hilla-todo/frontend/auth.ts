@@ -1,6 +1,6 @@
 // tag::impl[]
 // Uses the Vaadin provided login an logout helper methods
-import { login as loginImpl, LoginResult, logout as logoutImpl } from '@vaadin/fusion-frontend';
+import { login as loginImpl, LoginResult, logout as logoutImpl } from '@hilla/frontend';
 import UserInfo from './generated/com/example/application/model/UserInfo';
 import { UserInfoEndpoint } from './generated/endpoints';
 // end::impl[]
